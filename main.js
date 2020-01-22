@@ -1,4 +1,7 @@
  
+window.onload = function(){
+   click();
+    };
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 let interval
@@ -14,10 +17,16 @@ class Background{
     this.width = canvas.width
     this.height = canvas.height
     this.img = new Image()
-    this.img.src = "./img/segunda.jpg"
+    this.img.src = "./img/primera.jpg"
+    this.img2 = new Image ()
+    this.img2.src = "./img/pierde.jpg"
+    this.img2.onload = () => {
+        this.draw2()
+      }
     this.img.onload = () => {
-      this.draw()
-    }
+        this.draw()
+      }
+  
    // this.audio = new Audio()
    // this.audio.src =
    //   'http://23.237.126.42/ost/nyan-cat-fly-gamerip/tpwewlja/146__-0r._-2y.mp3'
@@ -37,6 +46,10 @@ draw() {
     ctx.font = '50px Avenir'
     ctx.fillStyle = 'white'
   }
+  draw2(){
+      
+    ctx.drawImage(this.img2, 0, 0, this.width, this.height)
+}
 }
 
 
@@ -52,6 +65,7 @@ constructor(x,y, imgSrc) {
 draw() {
   this.x-=20 // velocidad obstaculos
   ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
+//  ctx.strokeRect(this.x, this.y+25, this.width, this.height-25)
 }
 }
 
@@ -83,6 +97,7 @@ class Character {
         this.width,
         this.height
       )
+      //ctx.strokeRect(this.x + 40, this.y + 90, this.width - 85, this.height - 150)
     }
     goRight() {
         if (this.x > canvas.width-this.width - 500) return // limite de mov
@@ -114,10 +129,10 @@ class Character {
 }
 isTouching(obstacle) {
     return (
-      this.x < obstacle.x + obstacle.width &&
-      this.x + this.width > obstacle.x &&
-      this.y < obstacle.y + obstacle.height &&
-      this.y + this.height > obstacle.y
+      this.x + 40< obstacle.x + obstacle.width &&
+      this.x + 40 + this.width -85 > obstacle.x &&
+      this.y + 90 < obstacle.y +25 + obstacle.height -25 &&
+      this.y + 90 +this.height -150 > obstacle.y +25
     )
   }
 }
@@ -135,8 +150,8 @@ function generarObstacles() {
     let img, rnd
     if (frames % 50 === 0) {
       //rnd = Math.floor(Math.random()*200) //* canvas.height
-      if (Math.random() >= 0.01) imgSrc = "./img/osta2.png"
-      else imgSrc = "./img/osta1.png"
+      if (Math.random() >= 0.9) imgSrc = "./img/osta1.png"
+      else imgSrc = "./img/osta2.png"
       obstacles.push(new Obstacle(canvas.width + 300,400, imgSrc))
     }
   }
@@ -150,23 +165,24 @@ function generarObstacles() {
     if (trex.y >= canvas.height - trex.height) return gameOver()
     obstacles.forEach((obstacle, i) => {
       if (obstacle.x + obstacle.width <= 0) {
+          score += 10
         obstacles.splice(i, 1)
       }
       trex.isTouching(obstacle) ? gameOver() : null
     })
   }
   
+
   function gameOver() {
     clearInterval(interval)
+    ctx.clearRect(0,0,canvas.width, canvas.height)
+    trexWorld.draw2()
+    ctx.font= "90px serif"
+    ctx.fillStyle = "white"
+    ctx.fillText("Game Over", 500, 350, 300)
+    ctx.fillText(`score : ${score}`, 550,450,200)
   }
-//    obstacles.forEach((obstacle, idx) => {
-//      if (trex.isTouching(obstacle)) {
-//        if (obstacle.img.src) score += 10
-//        else score -= 20
-//        return obstacles.splice(idx, 1)
-//      }
-//    })
-  
+
 function update() {
     frames++
     if ( trex.y < 230 ) { trex.y += 5 }
@@ -174,8 +190,9 @@ function update() {
     trexWorld.draw()
     trex.draw()
     drawObstacles()
-    checkCollitions()
     ctx.fillText(String(score), canvas.width - 100, 100)
+    checkCollitions()
+    
   }
   document.addEventListener('keydown', ({ keyCode }) => {
     switch (keyCode) {
