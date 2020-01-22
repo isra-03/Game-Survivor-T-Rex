@@ -8,6 +8,11 @@ let interval
 let frames = 0
 const obstacles = []
 let score = 0
+const imgs = {
+    premio1: "./img/premio1.png",
+    premio2: "./img/premio2.png",
+    premio3: "./img/premio3.png"
+}
 
 
 class Background{
@@ -65,7 +70,8 @@ constructor(x,y, imgSrc) {
 draw() {
   this.x-=20 // velocidad obstaculos
   ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
-//  ctx.strokeRect(this.x, this.y+25, this.width, this.height-25)
+  ctx.strokeRect(this.x, this.y, this.width, this.height)
+  //ctx.strokeRect(this.x, this.y+25, this.width, this.height-25)
 }
 }
 
@@ -148,13 +154,18 @@ function startGame() {
 
 function generarObstacles() {
     let img, rnd
-    if (frames % 50 === 0) {
+    if (frames % 30 === 0) {
       //rnd = Math.floor(Math.random()*200) //* canvas.height
-      if (Math.random() >= 0.9) imgSrc = "./img/osta1.png"
-      else imgSrc = "./img/osta2.png"
+      if (Math.random() >= 0.9) imgSrc = "./img/obsta1.png"
+      else imgSrc = "./img/obsta2.png"
       obstacles.push(new Obstacle(canvas.width + 300,400, imgSrc))
     }
+    if (frames % 200 === 0) {
+        if (Math.random() >= 0.5) img = imgs.premio1
+        else img = imgs.premio2
+        obstacles.push(new Obstacle(canvas.width + 300,200, img))
   }
+}
   
   function drawObstacles() {
     generarObstacles()
@@ -167,10 +178,12 @@ function generarObstacles() {
       if (obstacle.x + obstacle.width <= 0) {
           score += 10
         obstacles.splice(i, 1)
+        if (obstacle.img.src === imgs.premio1) score += 50
       }
       trex.isTouching(obstacle) ? gameOver() : null
     })
   }
+  
   
 
   function gameOver() {
@@ -201,11 +214,10 @@ function update() {
   
       case 38:
        // this.vy = this.jumstrenght * 1.2
-       if ( trex.y > 230 ) { 
+       if ( trex.y === 231 ) { 
            return}
         return trex.goUp()
        
-  
       case 37:
         return trex.goLeft()
   

@@ -1,6 +1,12 @@
  
 canvas {
-    float: left;
     padding: 20px 0px;
     border: 1px solid black;
+  }
+
+  body{
+display: flex;
+justify-content: center;
+    background-image: url(./img/fondo.jpg);
+    background-size: cover;
   }
