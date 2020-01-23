@@ -1,15 +1,18 @@
  
 window.onload = function() {
-//    document.getElementById("start-button").onclick = function() {
-//      startGame();
+    document.getElementById("start-button").onclick = function() {
+      startGame();
+}
+ctx.clearRect (0,0,canvas.width,canvas.height)
     }
 
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
-ctx.fillRect (0,0,canvas.width,canvas.height)
+
 let interval
 let frames = 0
 const obstacles = []
+const premios=[]
 let score = 0
 const imgs = {
     premio1: "./img/premio1.png",
@@ -28,7 +31,7 @@ class Background{
     this.img.src = "./img/primera.jpg"
     this.img2 = new Image ()
     this.img2.src = "./img/pierde.jpg"
-    this.img2.onload = () => {
+        this.img2.onload = () => {
         this.draw2()
       }
     this.img.onload = () => {
@@ -81,6 +84,24 @@ draw() {
 }
 }
 
+class Prize {
+    constructor(x,y, imgSrc,tipo) {
+      this.x = x
+      this.y = y
+      this.width = 50
+      this.height = 80
+      this.img = new Image()
+      this.img.src = imgSrc
+      this.tipo=tipo
+    }
+    draw() {
+      this.x-=20 // velocidad obstaculos
+      ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
+      //ctx.strokeRect(this.x, this.y, this.width, this.height)
+      //ctx.strokeRect(this.x, this.y+25, this.width, this.height-25)
+    }
+    }
+
 class Character {
     constructor(x, y) {
       this.x = 0
@@ -97,6 +118,7 @@ class Character {
       this.audio = new Audio()
       this.audio.src =
        './music/ball-dragon-gt-jump.mp3'
+       this.equipo=[]
     }
     draw() {
       this.sx += 400
@@ -171,11 +193,19 @@ function generarObstacles() {
       else imgSrc = "./img/obsta2.png"
       obstacles.push(new Obstacle(canvas.width + 300,400, imgSrc))
     }
-    if (frames % 200 === 0) {
-        if (Math.random() >= 0.5) img = imgs.premio1
-        else img = imgs.premio2
-        obstacles.push(new Obstacle(canvas.width + 300,200, img))
-  }
+}
+
+function generatePrize(){
+    if (frames % 5 === 0 && !trex.equipo.includes(1)) {
+        premios.push(new Prize(canvas.width + 300,200, imgs.premio1,1))
+    }
+    if (frames % 5 === 0 && trex.equipo.includes(1) && !trex.equipo.includes(2)) {
+        premios.push(new Prize(canvas.width + 300,200, imgs.premio2,2))
+    }
+    if (frames % 5 === 0 && trex.equipo.includes(1) 
+    && trex.equipo.includes(2) && !trex.equipo.includes(3)) {
+        premios.push(new Prize(canvas.width + 300,200, imgs.premio3,3))
+    }
 }
   
   function drawObstacles() {
@@ -183,20 +213,52 @@ function generarObstacles() {
     obstacles.forEach(obstacle => obstacle.draw())
   }
 
+  function drawPrize(){
+      generatePrize()
+      premios.forEach(premio=>premio.draw())
+  }
   function checkCollitions() {
     if (trex.y >= canvas.height - trex.height) return gameOver()
     obstacles.forEach((obstacle, i) => {
       if (obstacle.x + obstacle.width <= 0) {
           score += 10
         obstacles.splice(i, 1)
-        if (obstacle.img.src === imgs.premio1) score += 50
       }
-      trex.isTouching(obstacle) ? gameOver() : null
+      (trex.isTouching(obstacle)) ? gameOver() : null
     })
   
   }
+  function checkCollect(){
+        premios.forEach((premio,i)=> {
+            if(trex.isTouching(premio)){
+                score+=50
+                trex.equipo.push(premio.tipo)
+                premios.splice(i, 1)
+            }
+            if (premio.x + premio.width <= 0) {
+              premios.splice(i, 1)
+            }
+        })
+        if (trex.equipo.includes(1) 
+        && trex.equipo.includes(2) && trex.equipo.includes(3)
+        ){
+            winner()
+        }
+  }
   
-  
+  function winner(){
+    clearInterval(interval)
+    ctx.clearRect(0,0,canvas.width, canvas.height)
+    let win = new Image()
+    win.src = "./img/ganador.png"
+    win.onload = function (){
+        ctx.drawImage(win,0,0,canvas.width,canvas.height)
+        ctx.font= "90px serif"
+    ctx.fillStyle = "blue"
+    ctx.fillText(`score : ${score}`, 500,200,300)
+    }
+    trexWorld.audio.pause()
+  }
 
   function gameOver() {
     clearInterval(interval)
@@ -207,7 +269,6 @@ function generarObstacles() {
     ctx.fillText("Game Over", 500, 350, 300)
     ctx.fillText(`score : ${score}`, 550,450,200)
     trexWorld.audio.pause()
-    Obstacle.audio.play()
   }
 
 
@@ -219,8 +280,9 @@ function update() {
     trex.draw()
     drawObstacles()
     ctx.fillText(String(score), canvas.width - 100, 100)
+    drawPrize()
     checkCollitions()
-    
+    checkCollect()    
   }
   document.addEventListener('keydown', ({ keyCode }) => {
     switch (keyCode) {
@@ -245,13 +307,6 @@ function update() {
     }
   })
   
-  document.querySelector('button').onclick = () => {
-    if (canvas.webkitRequestFullScreen) {
-      canvas.webkitRequestFullScreen()
-    } else {
-      canvas.mozRequestFullScreen()
-    }
-  }
   document.querySelector('button').onclick = () => {
     if (canvas.webkitRequestFullScreen) {
       canvas.webkitRequestFullScreen()

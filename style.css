@@ -11,3 +11,9 @@ canvas {
     background-image: url(./img/fondo.jpg);
     background-size: cover;
   }
+  #menu{
+    display: flex;
+    justify-content: center;
+    background-image: url(./img/vista-de-la-tierra-desde-la-luna.jpg);
+    background-size: cover;
+  }

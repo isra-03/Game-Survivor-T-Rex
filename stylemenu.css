@@ -1,0 +1,60 @@
+
+  body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-image: url(./img/vista-de-la-tierra-desde-la-luna.jpg);
+    background-size: cover;
+  }
+  .flecha{
+    width: 200px;
+   align-self: flex-end;
+   margin-top: 20px;
+ 
+  }
+  section:first-of-type{
+    display: flex;
+    justify-content: center;
+  }
+  section:last-of-type{
+    display: flex;
+
+    justify-content: center;
+    align-content: flex-end;
+  }
+  ul{
+    margin-top: 50px;
+  }
+  
+  h2, li{
+    background-color: aqua;
+  }
+
+  form{
+    height: 40px;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: red;
+    font-style: oblique;
+    border-color: royalblue;
+    border-bottom-style: double;
+    border-radius: 5px;
+    font-size: 20px;
+    color: seashell;
+   
+  }
+  input{
+    height: 40px;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: red;
+    font-style: oblique;
+    border-color: royalblue;
+    border-bottom-style: double;
+    border-radius: 5px;
+    font-size: 20px;
+    color: seashell;
+   
+  }
