@@ -7,13 +7,13 @@
 ## Instrucciones
 
 ### Desplazamiento de personaje, con las flechas de navegación se utilizan para la derecha o izquierda y para saltar flecha arriba
-![]("./img/flechas.png")
+![](./img/flechas.png)
 
 ## Forma de juego
 
 ### En el juego es multijudador por turnos, comenzando con el jugador 1, el cual puede ganar por puntos independiente de recolectar el equipo ya que al finalizar los dos turnos se valida el puntaje y se muestra el ganador
 
-![]("./img/Captura.png")
+![](https://github.com/isra-03/Game-Survivor-T-Rex/blob/master/img/Captura.png?raw=true)
 
 ### Poder especial: Mr. T-Rex salta con levitación.
 
