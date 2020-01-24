@@ -17,3 +17,29 @@ canvas {
     background-image: url(./img/vista-de-la-tierra-desde-la-luna.jpg);
     background-size: cover;
   }
+  
+   
+  button {
+        color: #0099CC; /*Color texto */
+        background: blanchedalmond; /* Eliminar color de fondo */
+        border: 2px solid blue; /* Ancho de borde, estilo de línea y color */
+        border-radius: 70px; /* Esquinas redondeadas */
+        text-transform: uppercase; /* Mayúsculas */
+        border: none;
+        color:blue;
+        padding: 16px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        -webkit-transition-duration: 0.4s; /* Safari */
+        transition-duration: 0.4s;
+        cursor: pointer;
+        height: 80px;
+        margin-top: auto;
+        margin-bottom: auto;
+  }
+  div{
+    flex-direction: column;
+  }

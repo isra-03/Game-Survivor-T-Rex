@@ -35,26 +35,22 @@
     width: 200px;
     margin-left: auto;
     margin-right: auto;
-    background-color: red;
+    background-color: #fff;
     font-style: oblique;
-    border-color: royalblue;
-    border-bottom-style: double;
     border-radius: 5px;
     font-size: 20px;
-    color: seashell;
-   
+     
   }
   input{
     height: 40px;
     width: 200px;
     margin-left: auto;
     margin-right: auto;
-    background-color: red;
+    background-color:red;
     font-style: oblique;
-    border-color: royalblue;
+    border-color: #fff;
     border-bottom-style: double;
     border-radius: 5px;
     font-size: 20px;
-    color: seashell;
-   
+    
   }

@@ -10,10 +10,14 @@ const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 
 let interval
+let jugador=0
 let frames = 0
-const obstacles = []
-const premios=[]
+let obstacles = []
+let premios=[]
 let score = 0
+let trex
+let trexWorld
+let puntuaciones=[,]
 const imgs = {
     premio1: "./img/premio1.png",
     premio2: "./img/premio2.png",
@@ -176,33 +180,36 @@ isTouching(obstacle) {
   }
 }
 
-let trex = new Character(0, canvas.height - 200)
-let trexWorld = new Background()
+
 
 function startGame() {
   if (interval) return
+  frames=0
+  score=0
+  trex = new Character(0, canvas.height - 200)
+  trexWorld = new Background()
   trexWorld.audio.play()
   interval = setInterval(update, 1000 / 15)
   }
 
 function generarObstacles() {
     let img, rnd
-    if (frames % 30 === 0) {
+    if (frames % 50 === 0) {
       //rnd = Math.floor(Math.random()*200) //* canvas.height
-      if (Math.random() >= 0.9) imgSrc = "./img/obsta1.png"
-      else imgSrc = "./img/obsta2.png"
+      if (Math.random() >= 0.1) imgSrc = "./img/obsta3.png"
+      else imgSrc = "./img/obsta4.png"
       obstacles.push(new Obstacle(canvas.width + 300,400, imgSrc))
     }
 }
 
 function generatePrize(){
-    if (frames % 5 === 0 && !trex.equipo.includes(1)) {
+    if (frames % 150 === 0 && !trex.equipo.includes(1)) {
         premios.push(new Prize(canvas.width + 300,200, imgs.premio1,1))
     }
-    if (frames % 5 === 0 && trex.equipo.includes(1) && !trex.equipo.includes(2)) {
+    if (frames % 150 === 0 && trex.equipo.includes(1) && !trex.equipo.includes(2)) {
         premios.push(new Prize(canvas.width + 300,200, imgs.premio2,2))
     }
-    if (frames % 5 === 0 && trex.equipo.includes(1) 
+    if (frames % 200 === 0 && trex.equipo.includes(1) 
     && trex.equipo.includes(2) && !trex.equipo.includes(3)) {
         premios.push(new Prize(canvas.width + 300,200, imgs.premio3,3))
     }
@@ -247,7 +254,12 @@ function generatePrize(){
   }
   
   function winner(){
+    puntuaciones[jugador]=score
+    jugador=(jugador+1)%2
     clearInterval(interval)
+    interval=undefined
+    obstacles=[]
+    premios=[]
     ctx.clearRect(0,0,canvas.width, canvas.height)
     let win = new Image()
     win.src = "./img/ganador.png"
@@ -256,18 +268,25 @@ function generatePrize(){
         ctx.font= "90px serif"
     ctx.fillStyle = "blue"
     ctx.fillText(`score : ${score}`, 500,200,300)
+    ctx.fillText("To continue press H", 500,300,300)
     }
     trexWorld.audio.pause()
   }
 
   function gameOver() {
+    puntuaciones[jugador]=score
+    jugador=(jugador+1)%2
     clearInterval(interval)
+    interval=undefined
+    obstacles=[]
+    premios=[]
     ctx.clearRect(0,0,canvas.width, canvas.height)
     trexWorld.draw2()
     ctx.font= "90px serif"
     ctx.fillStyle = "white"
     ctx.fillText("Game Over", 500, 350, 300)
     ctx.fillText(`score : ${score}`, 550,450,200)
+    ctx.fillText("To continue press H", 500,550,300)
     trexWorld.audio.pause()
   }
 
@@ -283,6 +302,35 @@ function update() {
     drawPrize()
     checkCollitions()
     checkCollect()    
+  }
+  function resultado(){
+    console.log("entra")
+    if (puntuaciones[0]>=0 && puntuaciones[1]>=0){
+      console.log("entra a cierre")
+      ctx.clearRect(0,0,canvas.width,canvas.height)
+      ctx.font="100px serif"
+      ctx.fillStyle="orange"
+      if (puntuaciones[0]>puntuaciones[1]) {
+        ctx.fillText("And the winner is ...",200,200,400)
+        ctx.fillText("Player 1",400,400,400)
+      } else if (puntuaciones[0]<puntuaciones[1]) {
+        ctx.fillText("And the winner is ...",200,200,400)
+        ctx.fillText("Player 2",400,400,400)
+      }
+      else {
+        if (trex.equipo.includes(1) && trex.equipo.includes(2) && trex.equipo.includes(3))
+        {
+          ctx.fillText("Both players got all the stuff!!!",400,200,400)
+        }
+        ctx.fillText("Draw!!! ;(",400,400,400)
+      }
+      puntuaciones[0]=undefined
+      puntuaciones[1]=undefined
+    }
+    else {
+      startGame()
+    }
+    
   }
   document.addEventListener('keydown', ({ keyCode }) => {
     switch (keyCode) {
@@ -303,6 +351,9 @@ function update() {
   
       case 13:
         return startGame()
+      
+      case 72:
+        return resultado()
         
     }
   })
