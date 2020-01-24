@@ -32,7 +32,7 @@ class Background{
     this.width = canvas.width
     this.height = canvas.height
     this.img = new Image()
-    this.img.src = "./img/primera.jpg"
+    this.img.src = "./img/segunda.jpg"
     this.img2 = new Image ()
     this.img2.src = "./img/pierde.jpg"
         this.img2.onload = () => {
@@ -193,23 +193,37 @@ function startGame() {
   }
 
 function generarObstacles() {
-    let img, rnd
-    if (frames % 50 === 0) {
+    let imgSrc
+    let rnd
+    if (frames % 30 === 0) {
       //rnd = Math.floor(Math.random()*200) //* canvas.height
-      if (Math.random() >= 0.1) imgSrc = "./img/obsta3.png"
-      else imgSrc = "./img/obsta4.png"
+      let rnd=Math.floor(Math.random()*4*120)%4
+      switch (rnd){
+        case 1:
+          imgSrc="./img/obsta1.png"
+          break;
+        case 2:
+          imgSrc="./img/obsta2.png"
+          break;
+        case 3:
+          imgSrc="./img/obsta3.png"
+          break;
+        case 0:
+          imgSrc="./img/obsta4.png"
+          break;
+      }
       obstacles.push(new Obstacle(canvas.width + 300,400, imgSrc))
     }
 }
 
 function generatePrize(){
-    if (frames % 150 === 0 && !trex.equipo.includes(1)) {
+    if (frames % 200 === 0 && !trex.equipo.includes(1)) {
         premios.push(new Prize(canvas.width + 300,200, imgs.premio1,1))
     }
-    if (frames % 150 === 0 && trex.equipo.includes(1) && !trex.equipo.includes(2)) {
+    if (frames % 250 === 0 && trex.equipo.includes(1) && !trex.equipo.includes(2)) {
         premios.push(new Prize(canvas.width + 300,200, imgs.premio2,2))
     }
-    if (frames % 200 === 0 && trex.equipo.includes(1) 
+    if (frames % 300 === 0 && trex.equipo.includes(1) 
     && trex.equipo.includes(2) && !trex.equipo.includes(3)) {
         premios.push(new Prize(canvas.width + 300,200, imgs.premio3,3))
     }

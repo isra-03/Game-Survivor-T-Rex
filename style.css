@@ -21,7 +21,7 @@ canvas {
    
   button {
         color: #0099CC; /*Color texto */
-        background: blanchedalmond; /* Eliminar color de fondo */
+        background: rgba(9, 190, 235, 0.562); /* Eliminar color de fondo */
         border: 2px solid blue; /* Ancho de borde, estilo de línea y color */
         border-radius: 70px; /* Esquinas redondeadas */
         text-transform: uppercase; /* Mayúsculas */
