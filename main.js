@@ -23,7 +23,8 @@ const imgs = {
     premio2: "./img/premio2.png",
     premio3: "./img/premio3.png"
 }
-
+let audioPierde = new Audio()
+audioPierde.src= './music/pacman-dies.mp3'
 
 class Background{
     constructor(){
@@ -76,9 +77,7 @@ constructor(x,y, imgSrc) {
   this.height = 80
   this.img = new Image()
   this.img.src = imgSrc
-  this.audio = new Audio()
-      this.audio.src =
-       './music/pacman-dies.mp3'
+ 
 }
 draw() {
   this.x-=20 // velocidad obstaculos
@@ -302,6 +301,7 @@ function generatePrize(){
     ctx.fillText(`score : ${score}`, 550,450,200)
     ctx.fillText("To continue press H", 500,550,300)
     trexWorld.audio.pause()
+    audioPierde.play()
   }
 
 
@@ -318,9 +318,7 @@ function update() {
     checkCollect()    
   }
   function resultado(){
-    console.log("entra")
-    if (puntuaciones[0]>=0 && puntuaciones[1]>=0){
-      console.log("entra a cierre")
+      if (puntuaciones[0]>=0 && puntuaciones[1]>=0){
       ctx.clearRect(0,0,canvas.width,canvas.height)
       ctx.font="100px serif"
       ctx.fillStyle="orange"
