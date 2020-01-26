@@ -1,9 +1,12 @@
  
-window.onload = function(){
-   click();
-    };
+window.onload = function() {
+//    document.getElementById("start-button").onclick = function() {
+//      startGame();
+    }
+
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
+ctx.fillRect (0,0,canvas.width,canvas.height)
 let interval
 let frames = 0
 const obstacles = []
@@ -32,10 +35,10 @@ class Background{
         this.draw()
       }
   
-   // this.audio = new Audio()
-   // this.audio.src =
-   //   'http://23.237.126.42/ost/nyan-cat-fly-gamerip/tpwewlja/146__-0r._-2y.mp3'
-   // this.audio.loop = true
+    this.audio = new Audio()
+    this.audio.src =
+     './music/juego.mp3'
+    this.audio.loop = true
 }
 draw() {    
     if (this.x < -canvas.width) this.x = 0
@@ -66,11 +69,14 @@ constructor(x,y, imgSrc) {
   this.height = 80
   this.img = new Image()
   this.img.src = imgSrc
+  this.audio = new Audio()
+      this.audio.src =
+       './music/pacman-dies.mp3'
 }
 draw() {
   this.x-=20 // velocidad obstaculos
   ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
-  ctx.strokeRect(this.x, this.y, this.width, this.height)
+  //ctx.strokeRect(this.x, this.y, this.width, this.height)
   //ctx.strokeRect(this.x, this.y+25, this.width, this.height-25)
 }
 }
@@ -88,6 +94,9 @@ class Character {
       this.img.onload = () => {
         this.draw()
       }
+      this.audio = new Audio()
+      this.audio.src =
+       './music/ball-dragon-gt-jump.mp3'
     }
     draw() {
       this.sx += 400
@@ -116,8 +125,10 @@ class Character {
         
       }
       goUp() {
+        trex.audio.play()
         if (this.y = 90) return
         this.y -= 150
+        
     }  
          // if ( key [38]){
          // this.vy = -this.jumstrenght * 1.2
@@ -148,7 +159,7 @@ let trexWorld = new Background()
 
 function startGame() {
   if (interval) return
-  //ld.audio.play()
+  trexWorld.audio.play()
   interval = setInterval(update, 1000 / 15)
   }
 
@@ -182,6 +193,7 @@ function generarObstacles() {
       }
       trex.isTouching(obstacle) ? gameOver() : null
     })
+  
   }
   
   
@@ -194,7 +206,10 @@ function generarObstacles() {
     ctx.fillStyle = "white"
     ctx.fillText("Game Over", 500, 350, 300)
     ctx.fillText(`score : ${score}`, 550,450,200)
+    trexWorld.audio.pause()
+    Obstacle.audio.play()
   }
+
 
 function update() {
     frames++
@@ -230,6 +245,13 @@ function update() {
     }
   })
   
+  document.querySelector('button').onclick = () => {
+    if (canvas.webkitRequestFullScreen) {
+      canvas.webkitRequestFullScreen()
+    } else {
+      canvas.mozRequestFullScreen()
+    }
+  }
   document.querySelector('button').onclick = () => {
     if (canvas.webkitRequestFullScreen) {
       canvas.webkitRequestFullScreen()

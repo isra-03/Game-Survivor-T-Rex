@@ -2,11 +2,12 @@
 canvas {
     padding: 20px 0px;
     border: 1px solid black;
-  }
+    background-color: aliceblue; 
+ }
 
   body{
-display: flex;
-justify-content: center;
+    display: flex;
+    justify-content: center;
     background-image: url(./img/fondo.jpg);
     background-size: cover;
   }
